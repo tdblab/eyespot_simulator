@@ -51,7 +51,7 @@ Create a clean Python environment named `eyespot_env` by running:
 conda create -n eyespot_env python=3.10 -y
 ```
 
-**Activate the environment**
+### Step 4: Activate the environment
 ```bash
 conda activate eyespot_env
 ```
