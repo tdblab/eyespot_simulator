@@ -16,6 +16,9 @@ The simulator models a 5-gene regulatory network governing eyespot formation acr
 
 📄 **[Read the Full Mathematical Documentation & Network Architecture (PDF)](#)** *(Link your PDF here)*
 
+<img width="749" height="681" alt="Screenshot 2026-08-27 064916" src="https://github.com/user-attachments/assets/62b4bfaf-10d2-4e5f-b7fb-ebafe3f765e2" />
+
+
 ---
 
 ## 🚀 Features
