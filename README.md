@@ -49,13 +49,13 @@ conda create -n eyespot_env python=3.10 -y
 conda activate eyespot_env
 ```
 
-**###Step 5: Install Dependencies**
+### Step 5: Install Dependencies
 Install all required scientific and web framework packages inside your active environment:
 ```bash
 pip install streamlit jax jaxlib matplotlib pillow numpy
 ```
 
-**###Step 6: Launch the Eyespot Simulator**
+### Step 6: Launch the Eyespot Simulator
 Run the Streamlit application:
 ```bash
 streamlit run app.py
