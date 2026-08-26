@@ -21,9 +21,13 @@ Explore how somatic mutations affect morphogen reaction-diffusion and Turing pat
 """)
 
 # ==========================================
-# SIDEBAR: TUNABLE PARAMETERS
+# SIDEBAR: RUN BUTTON AT THE VERY TOP
 # ==========================================
 with st.sidebar:
+    # RUN BUTTON PLACED AT THE VERY TOP
+    run_button = st.button("🚀 Run Simulation", type="primary", use_container_width=True)
+    
+    st.markdown("---")
     st.header("🧬 CRISPR Setup")
     
     clone_shape = st.selectbox(
@@ -42,7 +46,32 @@ with st.sidebar:
     Fz4_knockout = st.checkbox("Global Fz4 Knockout (Whole Tissue)", value=False)
     
     st.markdown("---")
-    st.header("⚙️ Global Network Parameters")
+    st.header("⚙️ Coupling & Network Parameters")
+    
+    # Coupling Strengths
+    K_wt = st.number_input("Wild-Type (K_wt)", value=1.4e-7, format="%.2e")
+    K_split = st.number_input("Global Fz4 KO (K_split)", value=1.72e-7, format="%.2e")
+    K_core_ko = st.slider("Core KO Coupling", min_value=1.50e-7, max_value=2.00e-7, value=1.90e-7, step=0.01e-7, format="%.2e")
+    
+    # ==========================================
+    # DYNAMIC STATE ROUTER LOGIC
+    # ==========================================
+    core_genes_selected = any(gene in target_genes for gene in ['Wg', 'Dpp', 'Dll'])
+    has_clone = clone_shape != 'none'
+    
+    if Fz4_knockout:
+        K_eff = K_split
+        k_source = "Global Fz4 KO (K_split)"
+    elif has_clone and core_genes_selected:
+        K_eff = K_core_ko
+        k_source = "Core Gene Clone (K_core_ko)"
+    else:
+        K_eff = K_wt
+        k_source = "Wild-Type (K_wt)"
+        
+    st.info(f"**Active Coupling:** {K_eff:.2e}\n*(Source: {k_source})*")
+    
+    st.markdown("---")
     
     # MODULE 1: Core Morphogens
     with st.expander("1. Core Morphogens (Wg & Dpp)", expanded=False):
@@ -54,16 +83,8 @@ with st.sidebar:
         alpha_late_mult = st.slider("Maturation Drop (alpha_late %)", 0.50, 1.00, 0.80, 0.01)
         T_late_days = st.number_input("Maturation Time (Days)", value=2.0, step=0.1)
 
-    # MODULE 2: Receptors & Transducers (Dynamic Coupling Router)
-    with st.expander("2. Receptors (Fz4) & Transducers (Dll)", expanded=True):
-        st.markdown("**Coupling Strengths (K_eff)**")
-        K_wt = st.number_input("Wild-Type (K_wt)", value=1.4e-7, format="%.2e")
-        K_split = st.number_input("Global Fz4 KO (K_split)", value=1.72e-7, format="%.2e")
-        
-        st.markdown("*Core Gene Clone Compensation (Wg, Dpp, Dll):*")
-        K_core_ko = st.slider("Core KO Coupling", min_value=1.50e-7, max_value=2.00e-7, value=1.90e-7, step=0.01e-7, format="%.2e")
-        
-        st.markdown("---")
+    # MODULE 2: Receptors & Transducers
+    with st.expander("2. Receptors (Fz4) & Transducers (Dll)", expanded=False):
         k1l = st.number_input("Dll Activation (k1l)", value=1.0e-3, format="%.2e")
         k3 = st.number_input("Dll Degradation (k3)", value=1.0e-3, format="%.2e")
         beta_f = st.number_input("Fz4 Production (beta_f)", value=1.2, step=0.1)
@@ -82,28 +103,6 @@ with st.sidebar:
         Ka = st.number_input("Antp Activation Threshold (Ka)", value=1.0e4, format="%.2e")
         Kas = st.number_input("Antp Feedback Threshold (Kas)", value=200.0, step=10.0)
         n_hill = st.slider("TF Hill Coefficient (n_hill)", 1.0, 5.0, 3.0, 0.1)
-    
-    st.markdown("---")
-    
-    # ==========================================
-    # DYNAMIC STATE ROUTER LOGIC
-    # ==========================================
-    core_genes_selected = any(gene in target_genes for gene in ['Wg', 'Dpp', 'Dll'])
-    has_clone = clone_shape != 'none'
-    
-    if Fz4_knockout:
-        K_eff = K_split
-        k_source = "Global Fz4 KO (K_split)"
-    elif has_clone and core_genes_selected:
-        K_eff = K_core_ko
-        k_source = "Core Gene Clone (K_core_ko)"
-    else:
-        K_eff = K_wt
-        k_source = "Wild-Type (K_wt)"
-        
-    st.info(f"**Active Coupling Strength:**\nUsing {K_eff:.2e}\n*(Sourced from: {k_source})*")
-    
-    run_button = st.button("🚀 Run Simulation", type="primary", use_container_width=True)
 
 # ==========================================
 # CORE JAX JIT FUNCTIONS 
@@ -343,7 +342,7 @@ if run_button:
         status_text.text("Simulation Complete!")
         progress_bar.empty()
         
-        # --- RENDER THE ANIMATED GIF VIA BASE64 HTML (FORCES BROWSER ANIMATION LOOP) ---
+        # RENDER THE ANIMATED GIF VIA BASE64 HTML
         with open(final_gif_path, "rb") as file:
             contents = file.read()
             data_url = base64.b64encode(contents).decode("utf-8")
