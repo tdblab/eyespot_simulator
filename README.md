@@ -5,7 +5,8 @@ An interactive *in silico* CRISPR clone engine and reaction-diffusion simulator 
 This tool bridges mathematical modeling (JAX-accelerated PDE solvers) with modern EvoDevo biology, allowing researchers to simulate cell-autonomous and non-cell-autonomous somatic mosaic knockouts within a multi-gene regulatory network.
 
 
-<img width="2400" height="1500" alt="eyespot_WT" src="https://github.com/user-attachments/assets/2b3d8da3-2eb0-417e-8049-115005463df6" />
+<img width="1870" height="990" alt="simulation_output" src="https://github.com/user-attachments/assets/2fe22e71-f7c6-4362-b99b-4998cc1be200" />
+
 
 
 ---
@@ -20,7 +21,8 @@ The simulator models a 5-gene regulatory network governing eyespot formation acr
 
 📄 **[Read the Full Mathematical Documentation & Network Architecture (PDF)](#)** *(Link your PDF here)*
 
-<img width="3340" height="2457" alt="fig6 - Copy" src="https://github.com/user-attachments/assets/6e05dfb3-06bb-4802-b595-25d0e745eaeb" />
+<img width="738" height="638" alt="Presentation1" src="https://github.com/user-attachments/assets/d3122d17-529a-48c2-b3cd-21e788671193" />
+
 
 
 
