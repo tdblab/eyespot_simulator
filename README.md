@@ -71,4 +71,4 @@ Run the Streamlit application:
 streamlit run app.py
 ```
 ### Else, run the webapp using the following link
-https://eyespotsimulator-kzwxkir9m7zjwyjrtczruw.streamlit.app/
+https://eyespotsimulator.streamlit.app/
